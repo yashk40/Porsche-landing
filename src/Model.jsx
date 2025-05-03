@@ -68,7 +68,7 @@ function Model({ modelPath }) {
 function LoadingScreen() {
   return (
     <div style={{
-      position: 'fixed',
+      position: 'absolute',
       top: 0,
       left: 0,
       width: '100%',
@@ -78,7 +78,9 @@ function LoadingScreen() {
       justifyContent: 'center',
       alignItems: 'center',
       flexDirection: 'column',
-      zIndex: 1000
+      zIndex: 1000,
+      touchAction: 'none',
+      userSelect: 'none'
     }}>
       <div style={{
         width: '50px',
@@ -100,7 +102,10 @@ function LoadingScreen() {
       <h2 style={{
         color: '#3498db',
         fontFamily: 'Arial, sans-serif',
-        margin: 0
+        margin: 0,
+        fontSize: '1.2rem',
+        textAlign: 'center',
+        padding: '0 20px'
       }}>Loading 3D Model...</h2>
     </div>
   );
@@ -108,17 +113,26 @@ function LoadingScreen() {
 
 export default function ModelViewer() {
   return (
-    <div id="model-container" style={{ width: '100%', height: '200vh', justifyContent:"center" , alignItems:"center" }}>
+    <div id="model-container" style={{ 
+      width: '100%', 
+      height: '200vh', 
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
       <div style={{ 
         position: 'sticky', 
         top: 0, 
         width: '100%', 
         height: '100vh',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        background: '#f0f0f0'
       }}>
         <Canvas
           camera={{ position: [0, 0, 7], fov: 45 }}
-          style={{ background: '#f0f0f0' , position:'absolute'}}
+          style={{ 
+            width: '100%',
+            height: '100%'
+          }}
           dpr={[1, 1.5]}
           performance={{ min: 0.5 }}
           shadows={{ type: 'PCFSoft', enabled: true }}
