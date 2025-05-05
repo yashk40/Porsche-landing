@@ -4,13 +4,17 @@ import ModelViewer from './Model';
 import Navbar from './Navbar';
 import Lenis from '@studio-freight/lenis';
 import { useEffect } from 'react';
+import Loader from './Loader';
+import SplitText from './Heading';
+import Headingfirst from './Headingfirst';
+import Hero from './Hero';
 
 function App() {
  
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 3,
+      duration: 5,
       smoothWheel: true,
       wheelMultiplier: 1.0,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -30,7 +34,9 @@ function App() {
 
   return (
     <>
+    <Loader/>
       <Navbar/>
+      <Hero/>
       <ModelViewer/>
     </>
   );

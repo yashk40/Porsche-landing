@@ -4,12 +4,36 @@ import { OrbitControls, useGLTF, AccumulativeShadows, RandomizedLight, Environme
 import { AdaptiveDpr, AdaptiveEvents, BakeShadows } from '@react-three/drei';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Headingfirst from './Headingfirst';
 
 gsap.registerPlugin(ScrollTrigger);
 
 function Model({ modelPath }) {
   const { scene } = useGLTF(modelPath, true);
   const modelRef = useRef();
+
+ const [data,setdata]=useState({x : 0 , Y : 0})
+
+
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      console.log(`Mouse X: ${e.clientX/window.innerWidth}, Mouse Y: ${e.clientY/window.innerHeight}`);
+      setdata({
+        x: e.clientX / window.innerWidth,
+        y: e.clientY / window.innerHeight,
+      });
+      
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  
 
   // Handle responsive positioning
   useEffect(() => {
@@ -23,7 +47,8 @@ function Model({ modelPath }) {
         modelRef.current.position.z = -2;
    
       } else {
-        modelRef.current.position.z = 3.5;
+        modelRef.current.position.z = 3.8;
+
       }
     };
 
@@ -44,11 +69,11 @@ function Model({ modelPath }) {
       if (lenis) {
         lenis.on('scroll', ScrollTrigger.update);
         gsap.ticker.add((time) => {
-          lenis.raf(time * 1000);
+          lenis.raf(time * 4000);
         });
       }
       
-      gsap.to(modelRef.current.rotation, {
+      gsap.from(modelRef.current.position, {
         y: 2 * Math.PI,
         scrollTrigger: {
           trigger: "#model-container",
@@ -64,11 +89,13 @@ function Model({ modelPath }) {
   return <primitive ref={modelRef} object={scene} scale={1} castShadow receiveShadow />;
 }
 
+
+
 // Loading component
 function LoadingScreen() {
   return (
     <div style={{
-      position: 'absolute',
+      position: 'fixed',
       top: 0,
       left: 0,
       width: '100%',
@@ -78,9 +105,7 @@ function LoadingScreen() {
       justifyContent: 'center',
       alignItems: 'center',
       flexDirection: 'column',
-      zIndex: 1000,
-      touchAction: 'none',
-      userSelect: 'none'
+      zIndex: 1000
     }}>
       <div style={{
         width: '50px',
@@ -102,10 +127,7 @@ function LoadingScreen() {
       <h2 style={{
         color: '#3498db',
         fontFamily: 'Arial, sans-serif',
-        margin: 0,
-        fontSize: '1.2rem',
-        textAlign: 'center',
-        padding: '0 20px'
+        margin: 0
       }}>Loading 3D Model...</h2>
     </div>
   );
@@ -113,26 +135,22 @@ function LoadingScreen() {
 
 export default function ModelViewer() {
   return (
-    <div id="model-container" style={{ 
-      width: '100%', 
-      height: '200vh', 
-      position: 'relative',
-      overflow: 'hidden'
-    }}>
+  <>
+  
+
+    <div id="model-container" style={{ width: '100%', height: '200vh', justifyContent:"center" , alignItems:"center" }}>
+     
       <div style={{ 
         position: 'sticky', 
         top: 0, 
         width: '100%', 
         height: '100vh',
-        overflow: 'hidden',
-        background: '#f0f0f0'
+        overflow: 'hidden'
       }}>
+       
         <Canvas
           camera={{ position: [0, 0, 7], fov: 45 }}
-          style={{ 
-            width: '100%',
-            height: '100%'
-          }}
+          style={{ background: 'white' , position:'absolute'}}
           dpr={[1, 1.5]}
           performance={{ min: 0.5 }}
           shadows={{ type: 'PCFSoft', enabled: true }}
@@ -174,6 +192,8 @@ export default function ModelViewer() {
         </Canvas>
       </div>
     </div>
+   {/* <Headingfirst/> */}
+    </>
   );
 }
 
